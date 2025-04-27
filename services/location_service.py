@@ -5,7 +5,7 @@ Location service for handling location-related functionality
 import math
 import requests
 from datetime import datetime, timedelta
-from app import db
+from extensions import db
 from models.location_history import LocationHistory
 from config import active_config
 

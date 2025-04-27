@@ -3,7 +3,7 @@ Safety Alert model for storing safety alerts and recommendations
 """
 
 from datetime import datetime
-from app import db
+from extensions import db
 
 class SafetyAlert(db.Model):
     """Safety Alert model for storing safety alerts and recommendations"""

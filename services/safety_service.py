@@ -3,7 +3,7 @@ Safety service for handling safety recommendations
 """
 
 from datetime import datetime
-from app import db
+from extensions import db
 from models.safety_alert import SafetyAlert
 from models.location_history import LocationHistory
 from services.location_service import LocationService

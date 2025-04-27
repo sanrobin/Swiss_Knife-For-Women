@@ -3,7 +3,7 @@ Location History model for storing user's location data
 """
 
 from datetime import datetime
-from app import db
+from extensions import db
 
 class LocationHistory(db.Model):
     """Location History model for storing user's location data"""

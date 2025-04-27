@@ -5,7 +5,7 @@ Emergency service for handling SOS alerts and emergency contacts
 import os
 import uuid
 from datetime import datetime
-from app import db
+from extensions import db
 from models.emergency_contact import EmergencyContact
 from models.safety_alert import SafetyAlert
 from models.location_history import LocationHistory

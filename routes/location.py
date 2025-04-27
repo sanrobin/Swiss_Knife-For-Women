@@ -6,7 +6,7 @@ from flask import Blueprint, request, jsonify, session, url_for, render_template
 import uuid
 import secrets
 from datetime import datetime, timedelta
-from app import db
+from extensions import db
 from models.user import User
 from models.emergency_contact import EmergencyContact
 from models.location_history import LocationHistory
@@ -159,3 +159,4 @@ def get_active_sessions():
             })
     
     return jsonify({'active_sessions': user_sessions}), 200
+

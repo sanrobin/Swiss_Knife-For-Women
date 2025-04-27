@@ -5,7 +5,7 @@ Authentication routes for user registration, login, and profile management
 from flask import Blueprint, request, jsonify, session, render_template, redirect, url_for
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
-from app import db
+from extensions import db
 from models.user import User
 
 auth_bp = Blueprint('auth', __name__, url_prefix='/auth')

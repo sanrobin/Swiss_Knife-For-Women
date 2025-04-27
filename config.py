@@ -8,11 +8,18 @@ from dotenv import load_dotenv
 # Load environment variables from .env file if it exists
 load_dotenv()
 
+# Ensure gevent support is enabled
+if os.environ.get('GEVENT_SUPPORT') != 'True':
+    os.environ['GEVENT_SUPPORT'] = 'True'
+
 class Config:
     """Base configuration class"""
     SECRET_KEY = os.environ.get('SECRET_KEY', 'dev-key-for-development-only')
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL', 'sqlite:///swiss_knife.db')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    
+    # Gevent support
+    GEVENT_SUPPORT = True
     
     # Emergency services API configuration
     EMERGENCY_API_KEY = os.environ.get('EMERGENCY_API_KEY', '')

@@ -4,7 +4,7 @@ Safety routes for AI-powered safety recommendations
 
 from flask import Blueprint, request, jsonify, session
 from datetime import datetime
-from app import db
+from extensions import db
 from models.user import User
 from models.location_history import LocationHistory
 from models.safety_alert import SafetyAlert

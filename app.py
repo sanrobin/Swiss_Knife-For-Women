@@ -4,14 +4,21 @@ Swiss Knife for Women - Main Application
 A safety app for women traveling alone
 """
 
+# Set GEVENT_SUPPORT environment variable before any imports
 import os
+os.environ['GEVENT_SUPPORT'] = 'True'
+
 from flask import Flask, render_template, request, jsonify, session
-from flask_socketio import SocketIO, emit, join_room, leave_room
-from flask_sqlalchemy import SQLAlchemy
-from werkzeug.security import generate_password_hash, check_password_hash
+from flask_socketio import emit, join_room, leave_room
 import secrets
 import json
 from datetime import datetime
+
+global GEVENT_SUPPORT
+GEVENT_SUPPORT = True
+
+# Import extensions
+from extensions import db, socketio
 
 # Initialize Flask app
 app = Flask(__name__)
@@ -19,9 +26,9 @@ app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', secrets.token_hex(16))
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///swiss_knife.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-# Initialize extensions
-db = SQLAlchemy(app)
-socketio = SocketIO(app, cors_allowed_origins="*")
+# Initialize extensions with the app
+db.init_app(app)
+socketio.init_app(app, cors_allowed_origins="*")
 
 # Import models after initializing db
 from models.user import User
@@ -108,4 +115,11 @@ def create_tables():
     db.create_all()
 
 if __name__ == '__main__':
+    # Ensure gevent support is enabled
+    if os.environ.get('GEVENT_SUPPORT') != 'True':
+        os.environ['GEVENT_SUPPORT'] = 'True'
+        
+    # Run with gevent as the async mode
     socketio.run(app, debug=True, host='0.0.0.0', port=5000)
+
+

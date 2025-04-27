@@ -4,7 +4,7 @@ Map routes for the interactive safety map feature
 
 from flask import Blueprint, request, jsonify, session
 import requests
-from app import db
+from extensions import db
 from models.user import User
 from models.location_history import LocationHistory
 from config import active_config

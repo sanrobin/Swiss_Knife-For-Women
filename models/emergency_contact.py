@@ -3,7 +3,7 @@ Emergency Contact model for storing user's emergency contacts
 """
 
 from datetime import datetime
-from app import db
+from extensions import db
 
 class EmergencyContact(db.Model):
     """Emergency Contact model for storing user's emergency contacts"""
