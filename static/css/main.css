@@ -1313,6 +1313,45 @@ input:checked + .toggle-slider:before {
     }
 }
 
+/* Safety Map Page Styles */
+.map-section {
+    max-width: 1200px;
+    margin: 0 auto 40px;
+    padding: 0 20px;
+}
 
+.map-section .place-filters {
+    margin-bottom: 20px;
+}
+
+.map-section #map-container {
+    margin-bottom: 30px;
+}
+
+.map-section .safety-recommendations,
+.map-section .location-sharing-panel {
+    margin-bottom: 30px;
+    padding: 20px;
+    background-color: var(--light-background);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+}
+
+.map-section h2 {
+    margin-bottom: 15px;
+    color: var(--primary-color);
+}
+
+.map-section .form-group {
+    margin-bottom: 15px;
+}
+
+.map-section #share-link-output {
+    margin-top: 15px;
+    padding: 15px;
+    background-color: var(--background-color);
+    border-radius: var(--border-radius);
+    border: 1px solid var(--border-color);
+}
 
 

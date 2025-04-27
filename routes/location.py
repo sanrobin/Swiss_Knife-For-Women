@@ -2,7 +2,7 @@
 Location sharing routes for real-time location tracking
 """
 
-from flask import Blueprint, request, jsonify, session, url_for
+from flask import Blueprint, request, jsonify, session, url_for, render_template
 import uuid
 import secrets
 from datetime import datetime, timedelta

@@ -44,7 +44,5 @@ A responsive web application designed to support women traveling alone by offeri
 └── utils/                  # Helper functions
 ```
 
-## License
-
-MIT
+## This project is created using Amazon Q
 

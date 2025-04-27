@@ -1,0 +1,25 @@
+{
+  "name": "Swiss Knife for Women",
+  "short_name": "SafetyApp",
+  "description": "A safety app for women traveling alone",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ff6b6b",
+  "icons": [
+    {
+      "src": "/static/images/icons/icon-144x144.svg",
+      "sizes": "144x144",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "orientation": "portrait",
+  "scope": "/",
+  "lang": "en-US",
+  "dir": "ltr",
+  "prefer_related_applications": false,
+  "related_applications": [],
+  "categories": ["safety", "travel", "utilities"],
+  "screenshots": []
+}

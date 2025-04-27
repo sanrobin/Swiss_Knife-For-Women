@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Note: This is an SVG file with .png extension as a placeholder -->
+<!-- In a real application, you would convert this to a proper PNG file -->
+<svg width="144px" height="144px" viewBox="0 0 144 144" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>App Icon 144x144</title>
+    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect fill="#FF6B6B" x="0" y="0" width="144" height="144" rx="28"></rect>
+        <circle fill="#FFFFFF" cx="72" cy="72" r="48"></circle>
+        <path d="M72,36 L72,108 M36,72 L108,72" stroke="#FF6B6B" stroke-width="14" stroke-linecap="round"></path>
+    </g>
+</svg>

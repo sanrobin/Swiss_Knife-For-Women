@@ -26,13 +26,13 @@
         <div class="emergency-card contacts">
             <h2>Emergency Contacts</h2>
             <div id="emergency-contacts-list">
-                {% if session.get('user_id') %}
+                {% if 'user_id' in session %}
                     <div class="loading-spinner">Loading your contacts...</div>
                 {% else %}
                     <p class="login-prompt">Please <a href="{{ url_for('auth.login') }}">login</a> to view your emergency contacts</p>
                 {% endif %}
             </div>
-            {% if session.get('user_id') %}
+            {% if 'user_id' in session %}
                 <button id="add-contact" class="button secondary">Add New Contact</button>
             {% endif %}
         </div>

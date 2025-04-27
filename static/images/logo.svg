@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="200" height="60" viewBox="0 0 200 60" xmlns="http://www.w3.org/2000/svg">
+  <rect width="60" height="60" rx="10" fill="#ff6b6b"/>
+  <path d="M30 10c-11.05 0-20 8.95-20 20s8.95 20 20 20 20-8.95 20-20-8.95-20-20-20zm0 6c7.732 0 14 6.268 14 14s-6.268 14-14 14-14-6.268-14-14 6.268-14 14-14z" fill="white"/>
+  <path d="M30 20c-5.523 0-10 4.477-10 10s4.477 10 10 10 10-4.477 10-10-4.477-10-10-10zm0 5c2.761 0 5 2.239 5 5s-2.239 5-5 5-5-2.239-5-5 2.239-5 5-5z" fill="white"/>
+  <text x="70" y="35" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#333">Swiss Knife</text>
+  <text x="70" y="50" font-family="Arial, sans-serif" font-size="14" fill="#666">for Women</text>
+</svg>
