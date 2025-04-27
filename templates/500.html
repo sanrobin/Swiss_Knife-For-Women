@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}Server Error - Swiss Knife for Women{% endblock %}
+
+{% block content %}
+<section class="error-container">
+    <div class="error-content">
+        <h1>500</h1>
+        <h2>Server Error</h2>
+        <p>Sorry, something went wrong on our end. Our team has been notified and we're working to fix the issue.</p>
+        
+        <div class="error-actions">
+            <a href="{{ url_for('index') }}" class="button primary">Go to Homepage</a>
+            <a href="javascript:location.reload()" class="button secondary">Try Again</a>
+        </div>
+    </div>
+    
+    <div class="error-image">
+        <img src="{{ url_for('static', filename='images/500-illustration.svg') }}" alt="Server error illustration">
+    </div>
+</section>
+
+<section class="error-help">
+    <h3>Need immediate assistance?</h3>
+    <p>If you're experiencing an emergency situation, please use the emergency features available on our homepage or contact local emergency services directly.</p>
+    <div class="quick-links">
+        <a href="{{ url_for('index') }}">Homepage</a>
+        <a href="{{ url_for('emergency') }}">Emergency Tools</a>
+    </div>
+</section>
+{% endblock %}

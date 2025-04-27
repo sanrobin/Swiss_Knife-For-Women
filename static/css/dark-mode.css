@@ -1,0 +1,97 @@
+/* Dark mode styles for Swiss Knife for Women */
+
+:root {
+    --primary-color: #ff6b6b;
+    --secondary-color: #339af0;
+    --text-color: #e9ecef;
+    --light-text: #adb5bd;
+    --background-color: #212529;
+    --light-background: #343a40;
+    --border-color: #495057;
+    --success-color: #40c057;
+    --warning-color: #ffa94d;
+    --danger-color: #fa5252;
+    --shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+body {
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
+
+header {
+    background-color: var(--background-color);
+}
+
+.hamburger, 
+.hamburger::before, 
+.hamburger::after {
+    background-color: var(--text-color);
+}
+
+.feature-card {
+    background-color: var(--light-background);
+}
+
+.feature-icon {
+    background-color: rgba(255, 107, 107, 0.2);
+}
+
+.how-it-works {
+    background-color: var(--light-background);
+}
+
+input, select, textarea {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    border-color: var(--border-color);
+}
+
+.flash-message.success {
+    background-color: rgba(64, 192, 87, 0.2);
+}
+
+.flash-message.info {
+    background-color: rgba(51, 154, 240, 0.2);
+}
+
+.flash-message.warning {
+    background-color: rgba(255, 169, 77, 0.2);
+}
+
+.flash-message.error {
+    background-color: rgba(250, 82, 82, 0.2);
+}
+
+.recommendation {
+    background-color: var(--light-background);
+}
+
+/* Map specific dark mode */
+.leaflet-tile {
+    filter: brightness(0.6) invert(1) contrast(3) hue-rotate(200deg) saturate(0.3) brightness(0.7);
+}
+
+.leaflet-container {
+    background: #303030;
+}
+
+.leaflet-popup-content-wrapper, 
+.leaflet-popup-tip {
+    background-color: var(--light-background);
+    color: var(--text-color);
+}
+
+.place-popup h3 {
+    color: var(--text-color);
+}
+
+.safety-recommendations,
+.location-sharing-panel {
+    background-color: var(--light-background);
+}
+
+#share-link {
+    background-color: var(--background-color);
+    color: var(--text-color);
+}

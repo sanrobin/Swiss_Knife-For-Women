@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block title %}Register - Swiss Knife for Women{% endblock %}
+
+{% block content %}
+<section class="auth-container">
+    <div class="auth-form-container">
+        <h1>Create an Account</h1>
+        <p class="auth-intro">Join Swiss Knife for Women to access safety features designed for women travelers.</p>
+        
+        <form id="register-form" class="auth-form" method="POST" action="{{ url_for('auth.register') }}">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+                <small>Password must be at least 8 characters long with letters and numbers</small>
+            </div>
+            
+            <div class="form-group">
+                <label for="confirm-password">Confirm Password</label>
+                <input type="password" id="confirm-password" name="confirm_password" required>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group half">
+                    <label for="first_name">First Name</label>
+                    <input type="text" id="first_name" name="first_name">
+                </div>
+                
+                <div class="form-group half">
+                    <label for="last_name">Last Name</label>
+                    <input type="text" id="last_name" name="last_name">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="phone_number">Phone Number</label>
+                <input type="tel" id="phone_number" name="phone_number">
+                <small>For emergency contacts and alerts</small>
+            </div>
+            
+            <div class="form-group">
+                <button type="submit" class="button primary full-width">Register</button>
+            </div>
+            
+            <div class="auth-links">
+                <p>Already have an account? <a href="{{ url_for('auth.login') }}">Login</a></p>
+            </div>
+        </form>
+    </div>
+    
+    <div class="auth-info">
+        <h2>Why Register?</h2>
+        <ul class="feature-list">
+            <li>Access the interactive safety map</li>
+            <li>Set up emergency contacts</li>
+            <li>Share your location with trusted contacts</li>
+            <li>Receive safety alerts and recommendations</li>
+            <li>Use the SOS emergency system</li>
+        </ul>
+        <div class="auth-image">
+            <img src="{{ url_for('static', filename='images/register-illustration.svg') }}" alt="Registration benefits illustration">
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('register-form');
+        const password = document.getElementById('password');
+        const confirmPassword = document.getElementById('confirm-password');
+        
+        form.addEventListener('submit', function(event) {
+            // Validate password match
+            if (password.value !== confirmPassword.value) {
+                event.preventDefault();
+                alert('Passwords do not match!');
+                return false;
+            }
+            
+            // Validate password strength
+            const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+            if (!passwordRegex.test(password.value)) {
+                event.preventDefault();
+                alert('Password must be at least 8 characters long and contain both letters and numbers.');
+                return false;
+            }
+        });
+    });
+</script>
+{% endblock %}

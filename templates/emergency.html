@@ -1,0 +1,381 @@
+{% extends "base.html" %}
+
+{% block title %}Emergency Tools - Swiss Knife for Women{% endblock %}
+
+{% block content %}
+<section class="emergency-header">
+    <h1>Emergency Tools</h1>
+    <p>Quick access to emergency features and contacts for your safety</p>
+</section>
+
+<section class="emergency-tools">
+    <div class="emergency-grid">
+        <div class="emergency-card sos">
+            <h2>SOS Alert</h2>
+            <p>Send an immediate alert with your location to your emergency contacts</p>
+            <button id="trigger-sos" class="button sos-button large">
+                <span class="sos-icon">!</span>
+                Trigger SOS Alert
+            </button>
+            <div class="countdown-timer" id="sos-countdown" style="display: none;">
+                <p>Sending alert in <span id="countdown">5</span> seconds</p>
+                <button id="cancel-sos" class="button secondary">Cancel</button>
+            </div>
+        </div>
+        
+        <div class="emergency-card contacts">
+            <h2>Emergency Contacts</h2>
+            <div id="emergency-contacts-list">
+                {% if session.get('user_id') %}
+                    <div class="loading-spinner">Loading your contacts...</div>
+                {% else %}
+                    <p class="login-prompt">Please <a href="{{ url_for('auth.login') }}">login</a> to view your emergency contacts</p>
+                {% endif %}
+            </div>
+            {% if session.get('user_id') %}
+                <button id="add-contact" class="button secondary">Add New Contact</button>
+            {% endif %}
+        </div>
+        
+        <div class="emergency-card services">
+            <h2>Local Emergency Services</h2>
+            <div class="emergency-services">
+                <div class="service-item">
+                    <div class="service-icon police"></div>
+                    <div class="service-info">
+                        <h3>Police</h3>
+                        <a href="tel:911" class="emergency-number">911</a>
+                    </div>
+                </div>
+                
+                <div class="service-item">
+                    <div class="service-icon ambulance"></div>
+                    <div class="service-info">
+                        <h3>Ambulance</h3>
+                        <a href="tel:911" class="emergency-number">911</a>
+                    </div>
+                </div>
+                
+                <div class="service-item">
+                    <div class="service-icon fire"></div>
+                    <div class="service-info">
+                        <h3>Fire Department</h3>
+                        <a href="tel:911" class="emergency-number">911</a>
+                    </div>
+                </div>
+                
+                <div class="service-item">
+                    <div class="service-icon helpline"></div>
+                    <div class="service-info">
+                        <h3>Women's Helpline</h3>
+                        <a href="tel:18007997233" class="emergency-number">1-800-799-7233</a>
+                    </div>
+                </div>
+            </div>
+            <p class="note">* Emergency numbers may vary by location. These are US-based numbers.</p>
+        </div>
+        
+        <div class="emergency-card location">
+            <h2>Share Location</h2>
+            <p>Share your current location with trusted contacts</p>
+            <div id="current-location-map" class="mini-map"></div>
+            <div class="location-actions">
+                <button id="share-location" class="button primary">Share My Location</button>
+                <button id="copy-location" class="button secondary">Copy Location Link</button>
+            </div>
+        </div>
+        
+        <div class="emergency-card safety-tips">
+            <h2>Emergency Safety Tips</h2>
+            <ul class="safety-tips-list">
+                <li>Stay in well-lit, populated areas when possible</li>
+                <li>Keep your phone charged and accessible</li>
+                <li>Share your itinerary with someone you trust</li>
+                <li>Trust your instincts - if something feels wrong, leave the situation</li>
+                <li>Use the SOS feature if you feel threatened or unsafe</li>
+                <li>Memorize important phone numbers in case your phone is lost</li>
+            </ul>
+        </div>
+        
+        <div class="emergency-card safe-places">
+            <h2>Nearby Safe Places</h2>
+            <div id="safe-places-list">
+                <div class="loading-spinner">Loading nearby safe places...</div>
+            </div>
+            <button id="view-all-safe-places" class="button secondary">View All on Map</button>
+        </div>
+    </div>
+</section>
+
+<!-- Add Contact Modal -->
+<div id="add-contact-modal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <span class="close-modal">&times;</span>
+        <h2>Add Emergency Contact</h2>
+        <form id="add-contact-form">
+            <div class="form-group">
+                <label for="contact-name">Name</label>
+                <input type="text" id="contact-name" name="name" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="contact-relationship">Relationship</label>
+                <input type="text" id="contact-relationship" name="relationship" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="contact-phone">Phone Number</label>
+                <input type="tel" id="contact-phone" name="phone" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="contact-email">Email (Optional)</label>
+                <input type="email" id="contact-email" name="email">
+            </div>
+            
+            <div class="form-group">
+                <button type="submit" class="button primary">Save Contact</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // SOS Button Functionality
+        const sosButton = document.getElementById('trigger-sos');
+        const sosCountdown = document.getElementById('sos-countdown');
+        const countdownDisplay = document.getElementById('countdown');
+        const cancelSos = document.getElementById('cancel-sos');
+        let countdownTimer;
+        
+        sosButton.addEventListener('click', function() {
+            sosButton.style.display = 'none';
+            sosCountdown.style.display = 'block';
+            
+            let seconds = 5;
+            countdownDisplay.textContent = seconds;
+            
+            countdownTimer = setInterval(function() {
+                seconds--;
+                countdownDisplay.textContent = seconds;
+                
+                if (seconds <= 0) {
+                    clearInterval(countdownTimer);
+                    triggerSosAlert();
+                }
+            }, 1000);
+        });
+        
+        cancelSos.addEventListener('click', function() {
+            clearInterval(countdownTimer);
+            sosCountdown.style.display = 'none';
+            sosButton.style.display = 'block';
+        });
+        
+        function triggerSosAlert() {
+            // In a real app, this would send the alert to emergency contacts
+            alert('SOS Alert has been sent to your emergency contacts with your current location.');
+            sosCountdown.style.display = 'none';
+            sosButton.style.display = 'block';
+        }
+        
+        // Add Contact Modal
+        const addContactBtn = document.getElementById('add-contact');
+        const addContactModal = document.getElementById('add-contact-modal');
+        const closeModal = document.querySelector('.close-modal');
+        
+        if (addContactBtn) {
+            addContactBtn.addEventListener('click', function() {
+                addContactModal.style.display = 'block';
+            });
+        }
+        
+        if (closeModal) {
+            closeModal.addEventListener('click', function() {
+                addContactModal.style.display = 'none';
+            });
+        }
+        
+        // Close modal when clicking outside
+        window.addEventListener('click', function(event) {
+            if (event.target === addContactModal) {
+                addContactModal.style.display = 'none';
+            }
+        });
+        
+        // Add Contact Form
+        const addContactForm = document.getElementById('add-contact-form');
+        if (addContactForm) {
+            addContactForm.addEventListener('submit', function(event) {
+                event.preventDefault();
+                
+                // In a real app, this would save the contact to the database
+                alert('Contact saved successfully!');
+                addContactModal.style.display = 'none';
+                
+                // Refresh the contacts list
+                loadEmergencyContacts();
+            });
+        }
+        
+        // Load Emergency Contacts
+        function loadEmergencyContacts() {
+            const contactsList = document.getElementById('emergency-contacts-list');
+            if (!contactsList) return;
+            
+            {% if session.get('user_id') %}
+                // In a real app, this would fetch contacts from the server
+                // For now, we'll just show some dummy data
+                setTimeout(function() {
+                    contactsList.innerHTML = `
+                        <div class="contact-list">
+                            <div class="contact-item">
+                                <div class="contact-info">
+                                    <h3>Jane Doe</h3>
+                                    <p>Mother</p>
+                                </div>
+                                <div class="contact-actions">
+                                    <a href="tel:+15551234567" class="call-button">Call</a>
+                                    <a href="#" class="text-button">Text</a>
+                                </div>
+                            </div>
+                            <div class="contact-item">
+                                <div class="contact-info">
+                                    <h3>John Smith</h3>
+                                    <p>Partner</p>
+                                </div>
+                                <div class="contact-actions">
+                                    <a href="tel:+15559876543" class="call-button">Call</a>
+                                    <a href="#" class="text-button">Text</a>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }, 1000);
+            {% endif %}
+        }
+        
+        loadEmergencyContacts();
+        
+        // Initialize mini map if Leaflet is available
+        if (typeof L !== 'undefined') {
+            const miniMap = document.getElementById('current-location-map');
+            if (miniMap) {
+                const map = L.map('current-location-map').setView([40.7128, -74.0060], 13);
+                
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                }).addTo(map);
+                
+                // Get user's location
+                if ('geolocation' in navigator) {
+                    navigator.geolocation.getCurrentPosition(function(position) {
+                        const lat = position.coords.latitude;
+                        const lng = position.coords.longitude;
+                        
+                        map.setView([lat, lng], 15);
+                        L.marker([lat, lng]).addTo(map);
+                    }, function() {
+                        // Error getting location
+                        console.log('Unable to get current location');
+                    });
+                }
+            }
+        }
+        
+        // Share Location Button
+        const shareLocationBtn = document.getElementById('share-location');
+        if (shareLocationBtn) {
+            shareLocationBtn.addEventListener('click', function() {
+                if ('geolocation' in navigator && 'share' in navigator) {
+                    navigator.geolocation.getCurrentPosition(function(position) {
+                        const lat = position.coords.latitude;
+                        const lng = position.coords.longitude;
+                        const locationUrl = `https://maps.google.com/?q=${lat},${lng}`;
+                        
+                        navigator.share({
+                            title: 'My Current Location',
+                            text: 'Here is my current location:',
+                            url: locationUrl
+                        }).then(() => {
+                            console.log('Location shared successfully');
+                        }).catch((error) => {
+                            console.log('Error sharing location:', error);
+                            // Fallback for browsers that don't support Web Share API
+                            prompt('Copy this link to share your location:', locationUrl);
+                        });
+                    });
+                } else {
+                    alert('Location sharing is not supported by your browser');
+                }
+            });
+        }
+        
+        // Copy Location Button
+        const copyLocationBtn = document.getElementById('copy-location');
+        if (copyLocationBtn) {
+            copyLocationBtn.addEventListener('click', function() {
+                if ('geolocation' in navigator) {
+                    navigator.geolocation.getCurrentPosition(function(position) {
+                        const lat = position.coords.latitude;
+                        const lng = position.coords.longitude;
+                        const locationUrl = `https://maps.google.com/?q=${lat},${lng}`;
+                        
+                        // Copy to clipboard
+                        const tempInput = document.createElement('input');
+                        tempInput.value = locationUrl;
+                        document.body.appendChild(tempInput);
+                        tempInput.select();
+                        document.execCommand('copy');
+                        document.body.removeChild(tempInput);
+                        
+                        alert('Location link copied to clipboard!');
+                    });
+                } else {
+                    alert('Geolocation is not supported by your browser');
+                }
+            });
+        }
+        
+        // Load Safe Places
+        function loadSafePlaces() {
+            const safePlacesList = document.getElementById('safe-places-list');
+            if (!safePlacesList) return;
+            
+            // In a real app, this would fetch safe places from the server based on location
+            setTimeout(function() {
+                safePlacesList.innerHTML = `
+                    <div class="safe-places">
+                        <div class="safe-place-item">
+                            <div class="place-icon police"></div>
+                            <div class="place-info">
+                                <h3>Central Police Station</h3>
+                                <p>0.5 miles away</p>
+                            </div>
+                        </div>
+                        <div class="safe-place-item">
+                            <div class="place-icon hospital"></div>
+                            <div class="place-info">
+                                <h3>City Hospital</h3>
+                                <p>1.2 miles away</p>
+                            </div>
+                        </div>
+                        <div class="safe-place-item">
+                            <div class="place-icon shelter"></div>
+                            <div class="place-info">
+                                <h3>Women's Shelter</h3>
+                                <p>1.8 miles away</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }, 1500);
+        }
+        
+        loadSafePlaces();
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+
+{% block title %}Swiss Knife for Women - Safety App for Women Travelers{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div class="hero-content">
+        <h1>Your Safety Companion</h1>
+        <p>Swiss Knife for Women is designed to support women traveling alone by offering safety features, real-time tracking, and emergency tools.</p>
+        <div class="hero-buttons">
+            {% if session.get('user_id') %}
+                <a href="{{ url_for('safety_map') }}" class="button primary">Open Safety Map</a>
+                <a href="{{ url_for('emergency') }}" class="button secondary">Emergency Tools</a>
+            {% else %}
+                <a href="{{ url_for('auth.register') }}" class="button primary">Get Started</a>
+                <a href="{{ url_for('auth.login') }}" class="button secondary">Login</a>
+            {% endif %}
+        </div>
+    </div>
+    <div class="hero-image">
+        <img src="{{ url_for('static', filename='images/hero-image.svg') }}" alt="Woman using safety app">
+    </div>
+</section>
+
+<section class="features">
+    <h2>Key Features</h2>
+    <div class="features-grid">
+        <div class="feature-card">
+            <div class="feature-icon">
+                <img src="{{ url_for('static', filename='images/icons/map.svg') }}" alt="Map icon">
+            </div>
+            <h3>Interactive Safety Map</h3>
+            <p>View your live location and nearby safety points like police stations, hospitals, and shelters.</p>
+        </div>
+        
+        <div class="feature-card">
+            <div class="feature-icon">
+                <img src="{{ url_for('static', filename='images/icons/phone.svg') }}" alt="Phone icon">
+            </div>
+            <h3>Emergency Speed Dial</h3>
+            <p>Quick access to emergency contacts and local emergency services based on your location.</p>
+        </div>
+        
+        <div class="feature-card">
+            <div class="feature-icon">
+                <img src="{{ url_for('static', filename='images/icons/location.svg') }}" alt="Location icon">
+            </div>
+            <h3>Real-Time Location Sharing</h3>
+            <p>Share your live location with trusted contacts for added safety during your travels.</p>
+        </div>
+        
+        <div class="feature-card">
+            <div class="feature-icon">
+                <img src="{{ url_for('static', filename='images/icons/alert.svg') }}" alt="Alert icon">
+            </div>
+            <h3>SOS Alert System</h3>
+            <p>Trigger emergency alerts with your location data by shaking your phone or long-pressing the SOS button.</p>
+        </div>
+        
+        <div class="feature-card">
+            <div class="feature-icon">
+                <img src="{{ url_for('static', filename='images/icons/offline.svg') }}" alt="Offline icon">
+            </div>
+            <h3>Offline Support</h3>
+            <p>Access critical features even without internet connection for emergencies in remote areas.</p>
+        </div>
+        
+        <div class="feature-card">
+            <div class="feature-icon">
+                <img src="{{ url_for('static', filename='images/icons/ai.svg') }}" alt="AI icon">
+            </div>
+            <h3>Safety Recommendations</h3>
+            <p>Receive AI-powered safety tips based on your location, time of day, and movement patterns.</p>
+        </div>
+    </div>
+</section>
+
+<section class="how-it-works">
+    <h2>How It Works</h2>
+    <div class="steps">
+        <div class="step">
+            <div class="step-number">1</div>
+            <h3>Create Your Account</h3>
+            <p>Sign up with your email and set up your emergency contacts.</p>
+        </div>
+        
+        <div class="step">
+            <div class="step-number">2</div>
+            <h3>Enable Location Services</h3>
+            <p>Allow the app to access your location for safety features.</p>
+        </div>
+        
+        <div class="step">
+            <div class="step-number">3</div>
+            <h3>Explore Safety Features</h3>
+            <p>Use the interactive map, set up emergency contacts, and customize your safety settings.</p>
+        </div>
+        
+        <div class="step">
+            <div class="step-number">4</div>
+            <h3>Travel with Confidence</h3>
+            <p>Enjoy your journey knowing you have safety tools at your fingertips.</p>
+        </div>
+    </div>
+</section>
+
+<section class="cta">
+    <div class="cta-content">
+        <h2>Ready to Travel Safely?</h2>
+        <p>Join thousands of women who travel with confidence using Swiss Knife for Women.</p>
+        {% if session.get('user_id') %}
+            <a href="{{ url_for('safety_map') }}" class="button primary">Open Safety Map</a>
+        {% else %}
+            <a href="{{ url_for('auth.register') }}" class="button primary">Get Started Now</a>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Check if geolocation is available
+    if ('geolocation' in navigator) {
+        console.log('Geolocation is available');
+    } else {
+        console.log('Geolocation is not available');
+        // Show warning to user
+        const featuresSection = document.querySelector('.features');
+        const warning = document.createElement('div');
+        warning.className = 'geolocation-warning';
+        warning.innerHTML = '<p><strong>Warning:</strong> Geolocation is not available in your browser. Some features may not work properly.</p>';
+        featuresSection.parentNode.insertBefore(warning, featuresSection);
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}Login - Swiss Knife for Women{% endblock %}
+
+{% block content %}
+<section class="auth-container">
+    <div class="auth-form-container">
+        <h1>Welcome Back</h1>
+        <p class="auth-intro">Log in to access your Swiss Knife for Women account and safety features.</p>
+        
+        <form id="login-form" class="auth-form" method="POST" action="{{ url_for('auth.login') }}">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            
+            <div class="form-group remember-me">
+                <input type="checkbox" id="remember" name="remember">
+                <label for="remember">Remember me</label>
+                <a href="#" class="forgot-password">Forgot password?</a>
+            </div>
+            
+            <div class="form-group">
+                <button type="submit" class="button primary full-width">Login</button>
+            </div>
+            
+            <div class="auth-links">
+                <p>Don't have an account? <a href="{{ url_for('auth.register') }}">Register</a></p>
+            </div>
+        </form>
+    </div>
+    
+    <div class="auth-info">
+        <h2>Safety Features</h2>
+        <ul class="feature-list">
+            <li>Interactive safety map</li>
+            <li>Emergency contacts</li>
+            <li>Location sharing</li>
+            <li>SOS emergency system</li>
+            <li>Safety recommendations</li>
+        </ul>
+        <div class="auth-image">
+            <img src="{{ url_for('static', filename='images/login-illustration.svg') }}" alt="Login benefits illustration">
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('login-form');
+        
+        form.addEventListener('submit', function(event) {
+            // Client-side validation can be added here if needed
+        });
+    });
+</script>
+{% endblock %}

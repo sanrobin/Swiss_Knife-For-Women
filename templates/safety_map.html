@@ -1,0 +1,252 @@
+{% extends "base.html" %}
+
+{% block title %}Safety Map - Swiss Knife for Women{% endblock %}
+
+{% block styles %}
+<style>
+    #map-container {
+        position: relative;
+        height: 70vh;
+        width: 100%;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    #map {
+        height: 100%;
+        width: 100%;
+    }
+    
+    .map-controls {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        z-index: 1000;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .map-control-button {
+        background-color: white;
+        border: none;
+        border-radius: 4px;
+        padding: 10px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .map-control-button:hover {
+        background-color: #f5f5f5;
+    }
+    
+    .map-control-button img {
+        width: 24px;
+        height: 24px;
+    }
+    
+    .place-filters {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+    }
+    
+    .place-filter {
+        background-color: #f5f5f5;
+        border: 2px solid transparent;
+        border-radius: 20px;
+        padding: 8px 16px;
+        cursor: pointer;
+        font-weight: 500;
+        transition: all 0.2s;
+    }
+    
+    .place-filter.active {
+        background-color: #ff6b6b;
+        color: white;
+        border-color: #ff6b6b;
+    }
+    
+    .safety-recommendations {
+        margin-top: 20px;
+        padding: 15px;
+        background-color: #f9f9f9;
+        border-radius: 8px;
+        border-left: 4px solid #ff6b6b;
+    }
+    
+    .recommendation {
+        margin-bottom: 10px;
+        padding: 10px;
+        border-radius: 4px;
+        background-color: white;
+        border-left: 3px solid #ccc;
+    }
+    
+    .recommendation.info {
+        border-left-color: #4dabf7;
+    }
+    
+    .recommendation.warning {
+        border-left-color: #ffa94d;
+    }
+    
+    .recommendation.danger {
+        border-left-color: #ff6b6b;
+    }
+    
+    .location-sharing-panel {
+        margin-top: 20px;
+        padding: 15px;
+        background-color: #f9f9f9;
+        border-radius: 8px;
+    }
+    
+    .share-link-container {
+        display: flex;
+        gap: 10px;
+        margin-top: 10px;
+    }
+    
+    .share-link-container input {
+        flex-grow: 1;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
+    
+    .custom-marker {
+        background-color: #ff6b6b;
+        border-radius: 50%;
+        border: 2px solid white;
+        text-align: center;
+        color: white;
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    }
+    
+    .custom-marker.user {
+        background-color: #4dabf7;
+    }
+    
+    .custom-marker.police {
+        background-color: #339af0;
+    }
+    
+    .custom-marker.hospital {
+        background-color: #f03e3e;
+    }
+    
+    .custom-marker.shelter {
+        background-color: #40c057;
+    }
+    
+    .place-popup {
+        min-width: 200px;
+    }
+    
+    .place-popup h3 {
+        margin-top: 0;
+        margin-bottom: 10px;
+        color: #333;
+    }
+    
+    .place-popup p {
+        margin: 5px 0;
+    }
+    
+    .place-popup .actions {
+        margin-top: 10px;
+        display: flex;
+        gap: 10px;
+    }
+    
+    .place-popup .actions button {
+        padding: 5px 10px;
+        border: none;
+        border-radius: 4px;
+        background-color: #ff6b6b;
+        color: white;
+        cursor: pointer;
+    }
+    
+    .place-popup .actions button:hover {
+        background-color: #fa5252;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <h1>Safety Map</h1>
+    <p>View your location and nearby safety points</p>
+</section>
+
+<section class="map-section">
+    <div class="place-filters">
+        <button class="place-filter active" data-type="police">Police Stations</button>
+        <button class="place-filter" data-type="hospital">Hospitals</button>
+        <button class="place-filter" data-type="shelter">Shelters</button>
+        <button class="place-filter" data-type="safe-area">Safe Areas</button>
+    </div>
+    
+    <div id="map-container">
+        <div id="map"></div>
+        <div class="map-controls">
+            <button id="locate-me" class="map-control-button" title="Locate Me">
+                <img src="{{ url_for('static', filename='images/icons/locate.svg') }}" alt="Locate">
+            </button>
+            <button id="share-location" class="map-control-button" title="Share Location">
+                <img src="{{ url_for('static', filename='images/icons/share.svg') }}" alt="Share">
+            </button>
+        </div>
+    </div>
+    
+    <div class="safety-recommendations">
+        <h2>Safety Recommendations</h2>
+        <div id="recommendations-container">
+            <p>Loading recommendations based on your location...</p>
+        </div>
+    </div>
+    
+    <div class="location-sharing-panel">
+        <h2>Location Sharing</h2>
+        <p>Share your live location with trusted contacts</p>
+        
+        <div class="form-group">
+            <label for="share-duration">Share for:</label>
+            <select id="share-duration">
+                <option value="1">1 hour</option>
+                <option value="2">2 hours</option>
+                <option value="4">4 hours</option>
+                <option value="8">8 hours</option>
+                <option value="24">24 hours</option>
+            </select>
+        </div>
+        
+        <button id="generate-share-link" class="button primary">Generate Sharing Link</button>
+        
+        <div id="share-link-output" style="display: none;">
+            <h3>Share this link with your trusted contact:</h3>
+            <div class="share-link-container">
+                <input type="text" id="share-link" readonly>
+                <button id="copy-link" class="button secondary">Copy</button>
+            </div>
+            <p>This link will expire after the selected duration.</p>
+        </div>
+        
+        <div id="active-shares" style="display: none;">
+            <h3>Active Location Shares:</h3>
+            <ul id="active-shares-list"></ul>
+        </div>
+    </div>
+</section>
+{% endblock %}
